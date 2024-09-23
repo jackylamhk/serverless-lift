@@ -58,6 +58,7 @@ const SCHEMA = {
         redirectToMainDomain: { type: "boolean" },
         certificate: { type: "string" },
         forwardedHeaders: { type: "array", items: { type: "string" } },
+        customOriginConfig: { type: "object" },
     },
     additionalProperties: false,
 } as const;
@@ -139,6 +140,7 @@ export class ServerSideWebsite extends AwsConstruct {
                     // API Gateway only supports HTTPS
                     protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
                     originPath,
+                    ...(configuration.customOriginConfig ?? {}),
                 }),
                 // For a backend app we all all methods
                 allowedMethods: AllowedMethods.ALLOW_ALL,
