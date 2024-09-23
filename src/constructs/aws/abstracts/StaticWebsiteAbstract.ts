@@ -47,6 +47,8 @@ export const COMMON_STATIC_WEBSITE_DEFINITION = {
         },
         errorPage: { type: "string" },
         redirectToMainDomain: { type: "boolean" },
+        bucket: { type: "object" },
+        distribution: { type: "object" },
     },
     additionalProperties: false,
     required: ["path"],
@@ -137,6 +139,7 @@ export abstract class StaticWebsiteAbstract extends AwsConstruct {
             httpVersion: HttpVersion.HTTP2,
             certificate: certificate,
             domainNames: this.domains,
+            ...this.configuration.distribution,
         });
 
         // CloudFormation outputs
@@ -337,6 +340,7 @@ export abstract class StaticWebsiteAbstract extends AwsConstruct {
         return {
             // For a static website, the content is code that should be versioned elsewhere
             removalPolicy: RemovalPolicy.DESTROY,
+            ...this.configuration.bucket,
         };
     }
 }
